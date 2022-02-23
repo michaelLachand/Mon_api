@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Article;
+use App\Entity\Auteur;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,26 +10,26 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 
-
-class ArticleController extends AbstractController
+class AuteurController extends AbstractController
 {
-    #[Route('/articles', name: 'article_create', methods: ['POST'])]
-    public function createArticle(Request $request,SerializerInterface $serializer,EntityManagerInterface $em): Response
+
+    #[Route('/auteurs', name: 'author_create', methods: ['POST'])]
+    public function createAuthor(Request $request,SerializerInterface $serializer,EntityManagerInterface $em)
     {
         $data = $request->getContent();
-        $author = $serializer->deserialize($data, Article::class, 'json');
+        $author = $serializer->deserialize($data, Auteur::class, 'json');
 
         $em->persist($author);
         $em->flush();
 
         return new Response('',Response::HTTP_CREATED);
-
     }
 
-    #[Route('/articles/{id}', name: 'article_show', methods: ['GET'])]
-    public function showArticle(Article $article,SerializerInterface $serializer)
+
+    #[Route('/auteur/{id}', name: 'auteur', methods: ['GET'])]
+    public function showAuthor(Auteur $author,SerializerInterface $serializer): Response
     {
-        $data = $serializer->serialize($article, 'json');
+        $data = $serializer->serialize($author, 'json');
 
         $response = new Response($data);
         $response->headers->set('Content-Type', 'application/json');
@@ -37,5 +37,4 @@ class ArticleController extends AbstractController
         return $response;
 
     }
-
 }
